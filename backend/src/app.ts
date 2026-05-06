@@ -1,12 +1,22 @@
 import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
+import { errorMiddleware } from "./app/middleware/_index";
 
 const app = express();
 
-app.get("/", (_req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "MenteCart API is running",
-  });
+app.use(express.json());
+app.use(cors());
+app.use(helmet());
+app.use(morgan("dev"));
+
+app.use(errorMiddleware);
+
+app.get("/", (_, res) => {
+    res.json({
+        message: "API running",
+    });
 });
 
 export default app;
