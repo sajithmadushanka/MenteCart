@@ -139,7 +139,7 @@ export class PaymentService {
             "WEBHOOK RECEIVED",
             payload
         );
-        
+
         const merchantSecret =
             process.env
                 .PAYHERE_MERCHANT_SECRET!;
@@ -213,5 +213,106 @@ export class PaymentService {
         await this.bookingRepository.updatePaymentFailed(
             booking._id.toString()
         );
+    }
+
+
+
+    // generate webview page for payhere payment
+    generatePayHereHtmlPage(
+        data: any
+    ) {
+        return `
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+
+    <title>
+        PayHere Payment
+    </title>
+
+    <script src="https://www.payhere.lk/lib/payhere.js"></script>
+</head>
+
+<body>
+
+<script>
+
+payhere.onCompleted = function(orderId) {
+    window.location.href =
+        "${data.return_url}";
+};
+
+payhere.onDismissed = function() {
+    window.location.href =
+        "${data.cancel_url}";
+};
+
+payhere.onError = function(error) {
+    alert("Payment Error: " + error);
+};
+
+const payment = {
+    sandbox: ${data.sandbox},
+
+    merchant_id:
+        "${data.merchant_id}",
+
+    return_url:
+        "${data.return_url}",
+
+    cancel_url:
+        "${data.cancel_url}",
+
+    notify_url:
+        "${data.notify_url}",
+
+    order_id:
+        "${data.order_id}",
+
+    items:
+        "${data.items}",
+
+    amount:
+        "${data.amount}",
+
+    currency:
+        "${data.currency}",
+
+    first_name:
+        "${data.first_name}",
+
+    last_name:
+        "${data.last_name}",
+
+    email:
+        "${data.email}",
+
+    phone:
+        "${data.phone}",
+
+    address:
+        "${data.address}",
+
+    city:
+        "${data.city}",
+
+    country:
+        "${data.country}",
+
+    hash:
+        "${data.hash}"
+};
+
+payhere.startPayment(
+    payment
+);
+
+</script>
+
+</body>
+</html>
+`;
     }
 }

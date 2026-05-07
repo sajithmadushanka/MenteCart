@@ -47,4 +47,31 @@ export class PaymentController {
                 )
             );
         };
+
+
+    renderPayHerePage =
+        async (
+            req: Request,
+            res: Response
+        ) => {
+            const {
+                bookingId,
+            } = req.params;
+
+            const id = Array.isArray(bookingId) ? bookingId[0] : bookingId;
+
+            const paymentData =
+                await this.paymentService.initializePayHerePayment(
+                    id
+                );
+
+            const paymentPage =
+                this.paymentService.generatePayHereHtmlPage(
+                    paymentData
+                );
+
+            res.send(
+                paymentPage
+            );
+        };
 }

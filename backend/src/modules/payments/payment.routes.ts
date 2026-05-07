@@ -25,4 +25,12 @@ router.post(
     )
 );
 
+router.get(
+    "/payhere/page/:bookingId",
+
+    asyncHandler(
+        paymentController.renderPayHerePage
+    )
+);
+
 export default router;
