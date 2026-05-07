@@ -26,19 +26,16 @@ export class PaymentService {
         bookingId: string
     ) {
 
-        console.log("bookingId", bookingId);
+      
 
         const booking =
             await this.bookingRepository.findById(
                 bookingId
             );
 
-        console.log("booking", booking);
+  
 
-        const allBookings =
-            await BookingModel.find();
-
-        console.log(allBookings);
+     
         if (!booking) {
             throw new AppError(
                 HTTP_STATUS.NOT_FOUND,
@@ -59,7 +56,7 @@ export class PaymentService {
             booking.totalAmount.toFixed(
                 2
             );
-        console.log("merchanSecret", merchantSecret);
+   
         const currency =
             "LKR";
 
@@ -135,10 +132,7 @@ export class PaymentService {
     async handlePayHereWebhook(
         payload: any
     ) {
-        console.log(
-            "WEBHOOK RECEIVED",
-            payload
-        );
+       
 
         const merchantSecret =
             process.env

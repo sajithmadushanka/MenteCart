@@ -143,9 +143,9 @@ export class BookingService {
                         userId,
                         item.selectedDate
                     );
-                console.log(userBookingCount);
-                console.log(BOOKING_LIMITS.MAX_BOOKINGS_PER_DAY);
-                console.log(item.quantity)
+                // console.log(userBookingCount);
+                // console.log(BOOKING_LIMITS.MAX_BOOKINGS_PER_DAY);
+                // console.log(item.quantity)
                 if (
                     userBookingCount + 1 >
                     BOOKING_LIMITS.MAX_BOOKINGS_PER_DAY

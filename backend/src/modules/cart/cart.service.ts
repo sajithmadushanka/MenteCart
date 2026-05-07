@@ -97,13 +97,13 @@ export class CartService {
             quantity: number;
         }
     ) {
-        console.log("Adding item to cart:", payload);
+
         const service =
             await this.serviceRepository.findActiveById(
                 payload.serviceId
             );
 
-        console.log(service);
+
         if (!service) {
             throw new AppError(
                 HTTP_STATUS.NOT_FOUND,
@@ -221,12 +221,9 @@ export class CartService {
                 cart,
                 itemId
             );
-        console.log("itemId:", itemId);
 
-        cart.items.forEach((item: any) => {
-            console.log("item.id:", item.id);
-            console.log("item._id:", item._id);
-        });
+
+
         if (!item) {
             throw new AppError(
                 HTTP_STATUS.NOT_FOUND,

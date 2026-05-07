@@ -1,0 +1,7 @@
+tunnel: 34b96abc-b058-4b24-94f0-44de912e5569
+credentials-file: /etc/cloudflared/creds.json
+
+ingress:
+  - hostname: dev.apptuki.com
+    service: http://backend:4040
+  - service: http_status:404

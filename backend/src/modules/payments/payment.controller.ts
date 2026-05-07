@@ -20,7 +20,7 @@ export class PaymentController {
         await this.paymentService.handlePayHereWebhook(
             req.body
         );
-        console.log(req.body);
+
         res.status(HTTP_STATUS.OK).json(
             successResponse(
                 null,
