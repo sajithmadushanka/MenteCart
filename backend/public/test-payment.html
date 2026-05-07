@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>PayHere SDK Test</title>
+    <script src="https://www.payhere.lk/lib/payhere.js"></script>
+</head>
+
+<body>
+    <button onclick="startPayment()">Pay Now</button>
+
+    <script>
+        payhere.onCompleted = function (orderId) {
+            console.log("Payment completed. OrderID:" + orderId);
+            alert("Payment completed! Order: " + orderId);
+        };
+
+        payhere.onDismissed = function () {
+            console.log("Payment dismissed");
+            alert("Payment dismissed");
+        };
+
+        payhere.onError = function (error) {
+            console.log("Error: " + error);
+            alert("Error: " + error);
+        };
+
+        function startPayment() {
+            var payment = {
+                sandbox: true,
+                merchant_id: "1235635",
+                return_url: "https://dev.apptuki.com/payment/success",
+                cancel_url: "https://dev.apptuki.com/payment/cancel",
+                notify_url: "https://dev.apptuki.com/api/payments/payhere/webhook",
+                order_id: "BK-1778140790551-5334",
+                items: "Test Booking",
+                amount: "200.00",
+                currency: "LKR",
+                hash: "A5D9E9944A286D22B15BA80A2896EA91",
+                first_name: "Test",
+                last_name: "User",
+                email: "test@example.com",
+                phone: "0771234567",
+                address: "Colombo",
+                city: "Colombo",
+                country: "Sri Lanka"
+            };
+            payhere.startPayment(payment);
+        }
+    </script>
+</body>
+
+</html>

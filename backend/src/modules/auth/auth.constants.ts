@@ -1,0 +1,23 @@
+export const AUTH_ERRORS = {
+  EMAIL_ALREADY_EXISTS: "Email already exists",
+
+  INVALID_CREDENTIALS: "Invalid email or password",
+
+  UNAUTHORIZED: "Unauthorized access",
+
+  INVALID_TOKEN: "Invalid token",
+
+  TOKEN_EXPIRED: "Token expired",
+};
+
+export const AUTH_ERROR_CODES = {
+  EMAIL_ALREADY_EXISTS: "AUTH_EMAIL_ALREADY_EXISTS",
+
+  INVALID_CREDENTIALS: "AUTH_INVALID_CREDENTIALS",
+
+  UNAUTHORIZED: "AUTH_UNAUTHORIZED",
+
+  INVALID_TOKEN: "AUTH_INVALID_TOKEN",
+
+  TOKEN_EXPIRED: "AUTH_TOKEN_EXPIRED",
+};
