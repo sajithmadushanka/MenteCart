@@ -29,6 +29,14 @@ flutter run \
 https://play.google.com/apps/test/RQtuUr5iWVE/ahAO29uNS8WkhMW8R36n78B41mtYGCt6DBQU5crNy8tClrA7p-9Zt1bz2ElGVnQw-uyT1pa3XCZEf-egsf1Wstppml
 
 
+# Sandbox & Testing
+Name on Card : CVV
+
+NO :4916217501611292
+
+Expiry date : 02/33
+
+------------------------------------------------------
 # Tech Stack
 
 - Flutter
