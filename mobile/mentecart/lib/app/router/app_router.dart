@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mentecart/features/bookings/presentation/screens/booking_success_screen.dart';
@@ -21,25 +23,37 @@ import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/services/presentation/screens/service_details_screen.dart';
 
 import '../../features/services/presentation/screens/services_screen.dart';
-  final rootNavigatorKey = GlobalKey<NavigatorState>();
-  
+import '../../features/auth/presentation/screens/splash_screen.dart';
+import '../../features/auth/presentation/bloc/auth_bloc.dart';
+import '../../features/auth/presentation/bloc/auth_state.dart';
+
+final rootNavigatorKey = GlobalKey<NavigatorState>();
+
 class AppRouter {
-  static GoRouter router({required bool isAuthenticated}) {
-  
+  static GoRouter createRouter(AuthBloc authBloc) {
     return GoRouter(
       navigatorKey: rootNavigatorKey,
       initialLocation: '/',
+      refreshListenable: GoRouterRefreshStream(authBloc.stream),
 
       redirect: (context, state) {
+        final authState = authBloc.state;
+
+        if (authState is AuthChecking) {
+          return '/splash';
+        }
+
+        final isAuthenticated = authState is AuthAuthenticated;
         final isAuthRoute =
             state.matchedLocation == '/login' ||
             state.matchedLocation == '/signup';
+        final isSplashRoute = state.matchedLocation == '/splash';
 
         if (!isAuthenticated && !isAuthRoute) {
           return '/login';
         }
 
-        if (isAuthenticated && isAuthRoute) {
+        if (isAuthenticated && (isAuthRoute || isSplashRoute)) {
           return '/';
         }
 
@@ -47,6 +61,11 @@ class AppRouter {
       },
 
       routes: [
+        GoRoute(
+          path: '/splash',
+          builder: (context, state) => const SplashScreen(),
+        ),
+
         GoRoute(
           path: '/login',
 
@@ -154,5 +173,22 @@ class AppRouter {
         ),
       ],
     );
+  }
+}
+
+class GoRouterRefreshStream extends ChangeNotifier {
+  GoRouterRefreshStream(Stream<dynamic> stream) {
+    notifyListeners();
+    _subscription = stream.asBroadcastStream().listen(
+      (dynamic _) => notifyListeners(),
+    );
+  }
+
+  late final StreamSubscription<dynamic> _subscription;
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
   }
 }

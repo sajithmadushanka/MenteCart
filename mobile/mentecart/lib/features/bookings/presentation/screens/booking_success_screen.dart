@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:go_router/go_router.dart';
 
 class BookingSuccessScreen extends StatelessWidget {
   final String bookingId;
-
   final String bookingNumber;
-
   final bool paid;
 
   const BookingSuccessScreen({
@@ -18,41 +15,29 @@ class BookingSuccessScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24),
-
+          padding: const EdgeInsets.symmetric(horizontal: 28),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-
             children: [
-              Container(
-                width: 140,
+              const Spacer(),
 
-                height: 140,
+              _SuccessIcon(),
 
-                decoration: BoxDecoration(
-                  color: Colors.green.shade100,
-
-                  shape: BoxShape.circle,
-                ),
-
-                child: Icon(
-                  Icons.check_circle,
-
-                  size: 90,
-
-                  color: Colors.green.shade700,
-                ),
-              ),
-
-              const SizedBox(height: 40),
+              const SizedBox(height: 36),
 
               Text(
-                'Booking Successful',
-
-                style: Theme.of(context).textTheme.headlineMedium,
+                'Booking\nSuccessful',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.displaySmall?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -1.5,
+                  height: 1.1,
+                ),
               ),
 
               const SizedBox(height: 16),
@@ -61,69 +46,144 @@ class BookingSuccessScreen extends StatelessWidget {
                 paid
                     ? 'Your payment was completed successfully.'
                     : 'Your booking was placed successfully.',
-
                 textAlign: TextAlign.center,
-
-                style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
-              ),
-
-              const SizedBox(height: 32),
-
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-
-                  child: Column(
-                    children: [
-                      const Text('Booking Number'),
-
-                      const SizedBox(height: 12),
-
-                      Text(
-                        bookingNumber,
-
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  ),
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                  height: 1.6,
                 ),
               ),
 
               const SizedBox(height: 40),
 
-              SizedBox(
-                width: double.infinity,
+              _BookingNumberCard(bookingNumber: bookingNumber),
 
-                child: ElevatedButton(
-                  onPressed: () {
-                    context.go('/bookings/$bookingId');
-                  },
+              const Spacer(),
 
-                  child: const Text('View Booking'),
-                ),
-              ),
+              _ActionButtons(bookingId: bookingId),
 
-              const SizedBox(height: 16),
-
-              SizedBox(
-                width: double.infinity,
-
-                child: OutlinedButton(
-                  onPressed: () {
-                    context.go('/');
-                  },
-
-                  child: const Text('Back To Home'),
-                ),
-              ),
+              const SizedBox(height: 12),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _SuccessIcon extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // final theme = Theme.of(context);
+
+    return Container(
+      width: 100,
+      height: 100,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: Colors.green.withValues(alpha: 0.3),
+          width: 2,
+        ),
+      ),
+      child: Container(
+        margin: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.green.withValues(alpha: 0.1),
+        ),
+        child: const Icon(Icons.check_rounded, size: 44, color: Colors.green),
+      ),
+    );
+  }
+}
+
+class _BookingNumberCard extends StatelessWidget {
+  final String bookingNumber;
+
+  const _BookingNumberCard({required this.bookingNumber});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.5)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'BOOKING NUMBER',
+            style: theme.textTheme.labelSmall?.copyWith(
+              letterSpacing: 2.5,
+              fontWeight: FontWeight.w700,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+            ),
+          ),
+
+          const SizedBox(height: 10),
+
+          Text(
+            bookingNumber,
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ActionButtons extends StatelessWidget {
+  final String bookingId;
+
+  const _ActionButtons({required this.bookingId});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          height: 52,
+          child: ElevatedButton(
+            onPressed: () => context.go('/bookings/$bookingId'),
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+            child: const Text(
+              'View Booking',
+              style: TextStyle(fontWeight: FontWeight.w700, letterSpacing: 0.3),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 12),
+
+        SizedBox(
+          width: double.infinity,
+          height: 52,
+          child: OutlinedButton(
+            onPressed: () => context.go('/'),
+            style: OutlinedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+            child: const Text(
+              'Back to Home',
+              style: TextStyle(fontWeight: FontWeight.w700, letterSpacing: 0.3),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

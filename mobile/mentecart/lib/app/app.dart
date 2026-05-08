@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mentecart/features/auth/presentation/screens/splash_screen.dart';
+import 'package:mentecart/app/theme/app_theme.dart';
 import 'package:mentecart/features/cart/repositories/cart_repository_impl.dart';
 import 'package:mentecart/features/services/data/datasources/services_remote_datasource.dart';
 import 'package:mentecart/features/services/presentation/bloc/services_bloc.dart';
@@ -26,6 +26,7 @@ import '../features/cart/presentation/bloc/cart_event.dart';
 
 import 'network/api_client.dart';
 
+import 'package:go_router/go_router.dart';
 import 'router/app_router.dart';
 
 import 'services/secure_storage_service.dart';
@@ -52,7 +53,7 @@ class MenteCartApp extends StatelessWidget {
             cartRepository: CartRepositoryImpl(
               remoteDatasource: CartRemoteDatasource(apiClient: ApiClient()),
             ),
-          )..add(CartFetched()),
+          ),
         ),
 
         BlocProvider(
@@ -66,30 +67,44 @@ class MenteCartApp extends StatelessWidget {
         ),
       ],
 
-      child: BlocBuilder<AuthBloc, AuthState>(
-        builder: (context, state) {
-          if (state is AuthChecking) {
-            return const MaterialApp(
-              debugShowCheckedModeBanner: false,
+      child: const AppView(),
+    );
+  }
+}
 
-              home: SplashScreen(),
-            );
-          }
+class AppView extends StatefulWidget {
+  const AppView({super.key});
 
-          final isAuthenticated = state is AuthAuthenticated;
+  @override
+  State<AppView> createState() => _AppViewState();
+}
 
-          final router = AppRouter.router(isAuthenticated: isAuthenticated);
+class _AppViewState extends State<AppView> {
+  late final GoRouter _router;
 
-          return MaterialApp.router(
-            debugShowCheckedModeBanner: false,
+  @override
+  void initState() {
+    super.initState();
+    _router = AppRouter.createRouter(context.read<AuthBloc>());
+  }
 
-            title: 'MenteCart',
-
-            theme: ThemeData(useMaterial3: true),
-
-            routerConfig: router,
-          );
-        },
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthAuthenticated) {
+          context.read<CartBloc>().add(CartFetched());
+        } else if (state is AuthInitial) {
+          context.read<CartBloc>().add(CartCleared());
+        }
+      },
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        title: 'MenteCart',
+        theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
+        themeMode: ThemeMode.system,
+        routerConfig: _router,
       ),
     );
   }

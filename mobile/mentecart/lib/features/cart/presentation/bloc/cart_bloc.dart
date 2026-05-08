@@ -17,6 +17,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<CartItemRemoved>(_onCartItemRemoved);
 
     on<CartItemUpdated>(_onCartItemUpdated);
+
+    on<CartCleared>((event, emit) => emit(CartInitial()));
   }
 
   Future<void> _onCartFetched(
